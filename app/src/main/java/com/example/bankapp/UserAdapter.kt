@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 class UserAdapter(private val users: List<User>) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
     class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val userName: TextView = itemView.findViewById(R.id.userName)
         val userEmail: TextView = itemView.findViewById(R.id.userEmail)
     }
 
@@ -20,8 +19,7 @@ class UserAdapter(private val users: List<User>) : RecyclerView.Adapter<UserAdap
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val user = users[position]
-        holder.userName.text = user.username
-        holder.userEmail.text = user.password
+        holder.userEmail.text = user.email
     }
 
     override fun getItemCount(): Int {
