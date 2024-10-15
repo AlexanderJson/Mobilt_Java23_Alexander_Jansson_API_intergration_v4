@@ -40,7 +40,6 @@
         android:gravity="center"
         android:padding="30dp">
     </View>
-
     <!-- Login form -->
     <LinearLayout
         android:id="@+id/loginMenuLayout"

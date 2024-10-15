@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bankapp.Model.ApiClient
+import com.example.bankapp.Model.Transactions
 import com.example.bankapp.R
 import com.example.bankapp.Model.User
 import com.example.bankapp.Model.UserAdapter
@@ -23,29 +24,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        val transactionList = listOf(
+            Transactions(1, 1, 68.25, "Nöje", "Espresso House", "2024-10-12", "expense", false, "2024-10-01"),
+            Transactions(2, 1, 578.35, "Mat/Livsmedel", "ICA Malmborgs", "2024-10-12", "expense", false, "2024-10-01")
+        )
 
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        val userService = ApiClient.createService(UserService::class.java)
-
-
-
-        // hämta users
-        userService.getUsers().enqueue(object : retrofit2.Callback<List<User>> {
-            override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
-                if (response.isSuccessful) {
-                    val users = response.body() ?: emptyList()
-                    userAdapter = UserAdapter(users)
-                    recyclerView.adapter = userAdapter
-                } else {
-                    Log.e("MainActivity", "Error: ${response.code()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<User>>, t: Throwable) {
-                Log.e("MainActivity", "Error: ${t.message}")
-            }
-        })
     }
 }

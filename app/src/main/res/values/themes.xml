@@ -3,7 +3,26 @@
     <style name="Base.Theme.BankApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="materialButtonStyle">@style/button_style</item>
+        <item name="editTextStyle">@style/CustomEditTextStyle</item>
     </style>
 
+    <style name= "button_style" parent="Widget.MaterialComponents.Button">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">@android:color/white</item>
+    <item name="android:padding">12dp</item>
+    <item name="android:gravity">center</item>
+    <item name="android:textStyle">bold</item>
+    <item name="backgroundTint">@color/royal_blue</item>
+    </style>
+
+    <style name="CustomEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/edit_text_draw</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textColor">@color/font_color_active</item>
+        <item name="android:textColorHint">@color/font_color_inactive</item>
+    </style>
+   
     <style name="Theme.BankApp" parent="Base.Theme.BankApp" />
 </resources>

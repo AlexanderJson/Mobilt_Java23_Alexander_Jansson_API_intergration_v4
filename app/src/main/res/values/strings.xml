@@ -1,7 +1,19 @@
 <resources>
     <string name="app_name">BankApp</string>
     <string name="email">Email</string>
-    <string name="password" />
+    <string name="password">Password</string>
     <string name="register">Register</string>
-    <string name="login" />
+    <string name="login">Login</string>
+    <string name="default_button">Default Value</string>
+    <string name="user_income">Your income (optional) </string>
+    <string name="user_goal">Your budget goal (optional)</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.bankapp.View
+package com.example.bankapp.View.ui.login
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -6,42 +6,43 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
+import androidx.fragment.app.Fragment
 import com.example.bankapp.Model.ApiClient
 import com.example.bankapp.Model.User
 import com.example.bankapp.Model.UserService
 import com.example.bankapp.R
+import com.example.bankapp.View.AuthActivity
+import com.example.bankapp.View.LoginActivity
+import com.example.bankapp.View.MainActivity
+import com.example.bankapp.View.RegistrationActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LoginActivity : AppCompatActivity() {
-
-
+class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var authService: UserService
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         //menu for login -> register activities
-        val loginLayout = findViewById<android.widget.LinearLayout>(R.id.loginMenuLayout)
-        val loginMenuItem = findViewById<android.widget.TextView>(R.id.loginMenuItem)
-        val registerMenuItem = findViewById<android.widget.TextView>(R.id.registerMenuItem)
+        val loginLayout = view.findViewById<android.widget.LinearLayout>(R.id.loginMenuLayout)
+        val loginMenuItem = view.findViewById<android.widget.TextView>(R.id.loginMenuItem)
+        val registerMenuItem = view.findViewById<android.widget.TextView>(R.id.registerMenuItem)
 
         //login form
-        val emailEditText = findViewById<EditText>(R.id.loginEmailEditText)
-        val passwordEditText = findViewById<EditText>(R.id.loginPasswordEditText)
-        val loginButton = findViewById<android.widget.Button>(R.id.loginButton)
+        val emailEditText = view.findViewById<EditText>(R.id.loginEmailEditText)
+        val passwordEditText = view.findViewById<EditText>(R.id.loginPasswordEditText)
+        val loginButton = view.findViewById<android.widget.Button>(R.id.loginButton)
         // authentication for login
         authService = ApiClient.createService(UserService::class.java)
 
         // go to login activity
         loginMenuItem.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(requireActivity(), LoginActivity::class.java)
             startActivity(intent)
         }
 
@@ -52,8 +53,7 @@ class LoginActivity : AppCompatActivity() {
             rotationAnimation.duration = 500
             rotationAnimation.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    val intent = Intent(this@LoginActivity, RegistrationActivity::class.java)
-                    startActivity(intent)
+                    (activity as? AuthActivity)?.switchToRegistration()
                 }
             })
             rotationAnimation.start()
@@ -73,24 +73,24 @@ class LoginActivity : AppCompatActivity() {
 
         val user = User(email = email, password = password)
 
-        authService.authenticateUser(user).enqueue(object : Callback<Map<String, String>>{
+        authService.authenticateUser(user).enqueue(object : Callback<Map<String, String>> {
             override fun onResponse(
                 call: Call<Map<String, String>>,
                 response: Response<Map<String, String>>
             ) {
                 val token = response.body()?.get("token")
                 if (token != null) {
-                Log.d("LoginActivity", "JWT Token: $token")
+                    Log.d("LoginActivity", "JWT Token: $token")
 
-                // sparar JWT token i shared preferences
-                val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-                sharedPreferences.edit().putString("token", token).apply()
+                    // sparar JWT token i shared preferences
+                    val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
+                    sharedPreferences.edit().putString("token", token).apply()
 
 
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                startActivity(intent)
-            }else{
-                Log.d("NULL TOKEN", "JWT Token: $token")
+                    val intent = Intent(requireActivity(), MainActivity::class.java)
+                    startActivity(intent)
+                }else{
+                    Log.d("NULL TOKEN", "JWT Token: $token")
 
                 }            }
 
@@ -101,3 +101,6 @@ class LoginActivity : AppCompatActivity() {
         )
     }
 }
+
+
+

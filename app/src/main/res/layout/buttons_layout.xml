@@ -1,0 +1,12 @@
+<Button android:id="@+id/loginButton"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="@android:color/white"
+    android:text="@string/default_button"
+    android:layout_marginTop="24dp"
+    android:padding="12dp"
+    android:gravity="center"
+    android:textStyle="bold"
+    app:backgroundTint="@color/royal_blue"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
