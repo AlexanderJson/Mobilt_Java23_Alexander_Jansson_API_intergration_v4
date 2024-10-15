@@ -13,4 +13,8 @@ public interface UserService {
 
     @POST("/users/register")
     fun registerUser(@Body user: User): Call<Void>
+
+
+    @POST("/authenticate")
+    fun authenticateUser(@Body user: User): Call<Map<String, String>>
 }

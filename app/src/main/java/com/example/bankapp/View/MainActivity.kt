@@ -30,27 +30,6 @@ class MainActivity : AppCompatActivity() {
         val userService = ApiClient.createService(UserService::class.java)
 
 
-        val createUser = User(
-            id = null,
-            email = "william.henry.harrison@example-pet-store.com",
-            password = "password123"
-        )
-
-        userService.registerUser(createUser).enqueue(object : retrofit2.Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-            if (response.isSuccessful) {
-                Log.d("MainActivity", "User created successfully")
-            } else {
-                Log.e("MainActivity", "Error: ${response.code()}")
-            }
-
-            }
-
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-        })
-
 
         // hämta users
         userService.getUsers().enqueue(object : retrofit2.Callback<List<User>> {

@@ -34,7 +34,6 @@ class RegistrationActivity : AppCompatActivity() {
 
 
             val createUser = User(
-                id = null,
                 email = email,
                 password = password
             )
