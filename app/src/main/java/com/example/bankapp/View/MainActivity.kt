@@ -1,17 +1,18 @@
-package com.example.bankapp
+package com.example.bankapp.View
 
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.ActionMode.Callback
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bankapp.Model.ApiClient
+import com.example.bankapp.R
+import com.example.bankapp.Model.User
+import com.example.bankapp.Model.UserAdapter
+import com.example.bankapp.Model.UserService
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.Query
 
 class MainActivity : AppCompatActivity() {
 
