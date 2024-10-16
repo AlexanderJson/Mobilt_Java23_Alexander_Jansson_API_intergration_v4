@@ -54,11 +54,6 @@
                 android:textColor="@android:color/white"
                 android:layout_marginTop="8dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/rounded_button" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -102,7 +97,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp" />
 
-    <!-- Add two buttons below the RecyclerView -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -118,7 +112,7 @@
             android:id="@+id/addExpenseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lägg till"
+            android:text="@string/Add"
             android:textColor="@android:color/white"
             app:backgroundTint="@color/royal_blue"
             android:layout_marginEnd="16dp"/>
@@ -127,7 +121,7 @@
             android:id="@+id/removeExpenseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ta bort"
+            android:text="@string/Remove"
             android:textColor="@android:color/white"
             app:backgroundTint="@color/royal_blue" />
 

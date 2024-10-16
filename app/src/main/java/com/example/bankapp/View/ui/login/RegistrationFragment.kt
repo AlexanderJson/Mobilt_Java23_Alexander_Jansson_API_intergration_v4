@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.fragment.app.Fragment
@@ -67,8 +68,12 @@ class RegistrationFragment : Fragment(R.layout.fragment_registration) {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
                             Log.d("MainActivity", "User created successfully")
+                            Toast.makeText(context, "Registrering lyckades!", Toast.LENGTH_SHORT).show() // Lägg till UI för notis/felmeddelanden!
+                            (activity as? AuthActivity)?.switchToLogin()
                         } else {
                             Log.e("MainActivity", "Error: ${response.code()}")
+                            Toast.makeText(context, "Registrering misslyckades!", Toast.LENGTH_SHORT).show()
+
                         }
 
                     }

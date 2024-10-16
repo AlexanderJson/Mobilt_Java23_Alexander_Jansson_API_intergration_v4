@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.fragment.app.Fragment
 import com.example.bankapp.Model.ApiClient
@@ -40,11 +41,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         // authentication for login
         authService = ApiClient.createService(UserService::class.java)
 
-        // go to login activity
-        loginMenuItem.setOnClickListener {
-            val intent = Intent(requireActivity(), LoginActivity::class.java)
-            startActivity(intent)
-        }
+
 
         // go to register activity
         registerMenuItem.setOnClickListener {
@@ -86,11 +83,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
                     sharedPreferences.edit().putString("token", token).apply()
 
-
+                    Toast.makeText(context, "Login lyckades!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(requireActivity(), MainActivity::class.java)
                     startActivity(intent)
                 }else{
                     Log.d("NULL TOKEN", "JWT Token: $token")
+                    Toast.makeText(context, "Login misslyckades!", Toast.LENGTH_SHORT).show()
+
 
                 }            }
 

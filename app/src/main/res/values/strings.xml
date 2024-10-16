@@ -16,4 +16,8 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="Add">Add</string>
+    <string name="Remove">Remove</string>
+    <string name="Amount">Amount</string>
+    <string name="_0_00">0.00</string>
 </resources>
