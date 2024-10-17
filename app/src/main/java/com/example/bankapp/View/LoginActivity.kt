@@ -8,6 +8,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
+import androidx.security.crypto.MasterKeys
 import com.example.bankapp.Model.ApiClient
 import com.example.bankapp.Model.User
 import com.example.bankapp.Model.UserService
@@ -82,10 +85,22 @@ class LoginActivity : AppCompatActivity() {
                 if (token != null) {
                 Log.d("LoginActivity", "JWT Token: $token")
 
-                // sparar JWT token i shared preferences
-                val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-                sharedPreferences.edit().putString("token", token).apply()
+                val masterKey = MasterKey.Builder(this@LoginActivity)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build()
 
+                val sharedPreferences = EncryptedSharedPreferences.create(
+                    this@LoginActivity,
+                    "MyPrefs",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+                )
+
+                /* sparar JWT token i shared preferences
+                val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+                */
+                    sharedPreferences.edit().putString("token", token).apply()
 
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
                 startActivity(intent)

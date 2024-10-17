@@ -20,4 +20,7 @@
     <string name="Remove">Remove</string>
     <string name="Amount">Amount</string>
     <string name="_0_00">0.00</string>
+    <string name="transaction_category">TRANSACTION CATEGORY</string>
+    <string name="transaction_name">TRANSACTION NAME</string>
+    <string name="transaction_date">TRANSACTION DATE</string>
 </resources>
