@@ -11,6 +11,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.fragment.app.Fragment
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.example.bankapp.Model.ApiClient
 import com.example.bankapp.Model.User
 import com.example.bankapp.Model.UserService
@@ -75,29 +77,37 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 call: Call<Map<String, String>>,
                 response: Response<Map<String, String>>
             ) {
+
                 val token = response.body()?.get("token")
                 if (token != null) {
                     Log.d("LoginActivity", "JWT Token: $token")
+                    Toast.makeText(requireContext(), "JWT Token: $token", Toast.LENGTH_LONG).show()
 
-                    // sparar JWT token i shared preferences
-                    val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE)
+                    val masterKey = MasterKey.Builder(requireContext())
+                        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                        .build()
+
+                    val sharedPreferences = EncryptedSharedPreferences.create(
+                        requireContext(),
+                        "MyPrefs",
+                        masterKey,
+                        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+                    )
+
                     sharedPreferences.edit().putString("token", token).apply()
-
-                    Toast.makeText(context, "Login lyckades!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(requireActivity(), MainActivity::class.java)
                     startActivity(intent)
-                }else{
+                } else{
                     Log.d("NULL TOKEN", "JWT Token: $token")
-                    Toast.makeText(context, "Login misslyckades!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "JWT Token: $token", Toast.LENGTH_LONG).show()
+                }
+                 }
+                override fun onFailure(call: Call<Map<String, String>>, t: Throwable) {
+                    Log.e("LoginActivity", "Error: ${t.message}")
 
-
-                }            }
-
-            override fun onFailure(call: Call<Map<String, String>>, t: Throwable) {
-                Log.e("LoginActivity", "Error: ${t.message}")
             }
-        }
-        )
+        })
     }
 }
 

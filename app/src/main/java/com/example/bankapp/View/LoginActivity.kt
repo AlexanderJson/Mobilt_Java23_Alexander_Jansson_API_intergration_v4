@@ -99,8 +99,7 @@ class LoginActivity : AppCompatActivity() {
 
                 /* sparar JWT token i shared preferences
                 val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-                */
-                    sharedPreferences.edit().putString("token", token).apply()
+                */sharedPreferences.edit().putString("token", token).apply()
 
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
                 startActivity(intent)
