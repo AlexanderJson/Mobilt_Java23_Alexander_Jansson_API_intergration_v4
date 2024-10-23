@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bankapp.Model.ApiClient
+import com.example.bankapp.Model.TransactionAdapter
 import com.example.bankapp.Model.Transactions
 import com.example.bankapp.R
 import com.example.bankapp.Model.User
@@ -22,7 +23,9 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity(), AddTransactionFragment.OnTransactionAddedListener {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var userAdapter: UserAdapter
+    private lateinit var transactionAdapter: TransactionAdapter
+
+    private var transactionList = mutableListOf<Transactions>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,27 +34,56 @@ class MainActivity : AppCompatActivity(), AddTransactionFragment.OnTransactionAd
         val addBtn = findViewById<android.widget.Button>(R.id.addExpenseButton)
         val dialog = AddTransactionFragment()
         val testBtn = findViewById<android.widget.Button>(R.id.removeExpenseButton)
+        getTransaction()
 
-        testBtn.setOnClickListener {
-            val token = SharedPreferencesUtil.getJwtToken(this)
-            Log.d("MainActivity", "Token in testBtn click: $token")
-        }
+        recyclerView = findViewById(R.id.transactionsRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        transactionAdapter = TransactionAdapter(transactionList)
+
+        recyclerView.adapter = transactionAdapter
+
 
         addBtn.setOnClickListener {
             dialog.show(supportFragmentManager, "AddTransactionDialog")
         }
 
-
-        val transactionList = listOf(
-            Transactions(1, 1, 68.25, "Nöje", "Espresso House", "2024-10-12", "expense", false, "2024-10-01"),
-            Transactions(2, 1, 578.35, "Mat/Livsmedel", "ICA Malmborgs", "2024-10-12", "expense", false, "2024-10-01")
-        )
+        testBtn.setOnClickListener {
+            getTransaction()
+        }
 
     }
 
-    override fun onTransactionAdded(transactions: Transactions){
-        addTransaction(this,transactions)
-        Log.d("MainActivity", "Transaction added: $transactions.amount")
+    private fun getTransaction(){
+        val token = SharedPreferencesUtil.getJwtToken(this)
+        val authHeader = "Bearer $token"
+        val service = ApiClient.createService(TransactionService::class.java)
+
+        service.getTransaction(authHeader).enqueue(object : retrofit2.Callback<List<Transactions>> {
+            override fun onResponse(call: Call<List<Transactions>>, response: Response<List<Transactions>>) {
+                if (response.isSuccessful) {
+                   val transactions = response.body()
+
+                    transactionList.clear()
+                    transactions?.let { transactionList.addAll(it) }
+
+                    transactionAdapter.notifyDataSetChanged()
+                    Toast.makeText(this@MainActivity, "Transactions fetched successfully", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<List<Transactions>>, t: Throwable) {
+                Log.e("MainActivity", "Error: ${t.message}")
+            }
+             })
+
+    }
+
+
+    override fun onTransactionAdded(transaction: Transactions){
+        addTransaction(this,transaction)
+        Log.d("MainActivity", "Transaction added: $transaction.amount")
+        transactionList.add(transaction)
+        transactionAdapter.notifyItemInserted(transactionList.size - 1)
+        recyclerView.scrollToPosition(transactionList.size - 1)
     }
 
 

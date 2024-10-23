@@ -9,6 +9,7 @@ object SharedPreferencesUtil {
 
     fun getJwtToken(context: Context): String? {
 
+        // sparar token i shared prefs (encrypted)
          val masterKey = MasterKey.Builder(context)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build();
@@ -24,4 +25,6 @@ object SharedPreferencesUtil {
         }
 
 
-    }
+
+
+}

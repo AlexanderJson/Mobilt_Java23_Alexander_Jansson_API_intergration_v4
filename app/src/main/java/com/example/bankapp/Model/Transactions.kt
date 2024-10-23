@@ -5,7 +5,7 @@ data class Transactions(
     val userId: Int = 0,
     val amount: Double,
     val category: String = "",
-    val description: String = "",
+    val name: String = "",
     val date: String = "",
     val type: String = "",
     val isRecurring: Boolean = false,

@@ -36,11 +36,14 @@ class AddTransactionFragment : DialogFragment() {
 
         addBtn.setOnClickListener {
             val amountEditText = view.findViewById<EditText>(R.id.amountEditText)
+            val nameEditText = view.findViewById<EditText>(R.id.nameEditText)
+
             val amount = amountEditText.text.toString().toDoubleOrNull()
+            val name = nameEditText.text.toString()
+            if (amount != null && name.isNotEmpty()) {
 
-            if (amount != null) {
-
-                val transaction = Transactions(amount = amount)
+                val transaction = Transactions(amount = amount, name = name)
+                addTransaction(requireContext(), transaction)
                 Log.d("AddTransactionFragment", "Transaction created with amount: $amount")
                 listener?.onTransactionAdded(transaction)
                 dismiss()
@@ -60,6 +63,8 @@ class AddTransactionFragment : DialogFragment() {
 
 
     private fun addTransaction(context: Context, transaction: Transactions) {
+
+        // hämtar jwt token från shared prefs
         val token = getJwtToken(context)
 
         if (token != null) {
