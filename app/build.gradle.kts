@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android") version "2.44" apply false
 }
 
 android {
@@ -41,6 +43,10 @@ android {
 dependencies {
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.lifecycle.viewmodel)
+    kapt(libs.androidx.hilt.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation (libs.androidx.security.crypto)
