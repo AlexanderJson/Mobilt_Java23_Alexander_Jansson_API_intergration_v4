@@ -4,7 +4,7 @@ En Android-app där man säkert kan följa sitt spenderande och sätta upp spara
 ![Home screen](./images/addTransaction(2).png)
 
 ## Download
-[Download the latest APK](https://github.com/username/repository/releases/latest)
+[Download the latest APK](https://github.com/AlexanderJson/Mobilt_Java23_Alexander_Jansson_API_intergration_v4/releases/tag/v1.0.0)
 
 
 
