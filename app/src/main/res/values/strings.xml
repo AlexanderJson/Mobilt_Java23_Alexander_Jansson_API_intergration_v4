@@ -25,4 +25,11 @@
     <string name="transaction_date">DATE</string>
     <string name="Category">Category</string>
     <string name="transaction_amount">Amount\n</string>
+    <string name="Home">Home</string>
+    <string name="Edit_details">Edit profile</string>
+    <string name="logout">Logout</string>
+    <string name="username">Email</string>
+    <string name="budget">Budget Goal (optional)</string>
+    <string name="Update_profile">Update</string>
+    <string name="Delete_user">Delete</string>
 </resources>

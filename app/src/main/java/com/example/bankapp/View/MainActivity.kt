@@ -1,11 +1,13 @@
 package com.example.bankapp.View
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bankapp.Model.ApiClient
@@ -14,6 +16,7 @@ import com.example.bankapp.Model.Transactions
 import com.example.bankapp.R
 import com.example.bankapp.SharedPreferencesUtil
 import com.example.bankapp.Transactions.TransactionRepository
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Response
 
@@ -48,6 +51,41 @@ class MainActivity : AppCompatActivity(), AddTransactionFragment.OnTransactionAd
             getTransaction()
         }
 
+
+        val bottomNavigatonView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+
+        bottomNavigatonView.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_home -> {
+                    true
+                }
+
+                R.id.nav_edit_users -> {
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    startActivity(intent)
+
+                    true
+                }
+                R.id.nav_logout -> {
+                    val intent = Intent(this, AuthActivity::class.java)
+                    startActivity(intent)
+                  //  userService.logoutUser()
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+
+
+
+    }
+
+    private fun loadFragment(chosenFragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, chosenFragment)
+            .commit()
     }
 
     private fun getTransaction(){
