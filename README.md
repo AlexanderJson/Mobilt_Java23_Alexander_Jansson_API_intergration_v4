@@ -26,6 +26,7 @@ En Android-app där man säkert kan följa sitt spenderande och sätta upp spara
 ## Install instructions
 To use the app with the API and database, follow these steps:
 
+
 1. Go to any folder.
 2. In the address bar, type `cmd` and press **Enter**.
 3. Clone the project:
@@ -33,10 +34,9 @@ To use the app with the API and database, follow these steps:
 ```bash
 git clone https://github.com/AlexanderJson/Mobilt_Java23_Alexander_Jansson_API_intergration_v4
 ```
+#### Inside the folder is a SQL folder for database, API folder for API. 
+### A local server environment is needed such as XAMPP etc. 
 
-```bash
-git clone https://github.com/AlexanderJson/Mobilt_Java23_Alexander_Jansson_API_intergrationv4-SPRING_API
-```
 
 ## Features
 - **Register/Login**: Uses hashing and JWT tokens for security.
