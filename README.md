@@ -1,29 +1,33 @@
 # Budget App
 
 En Android-app där man säkert kan följa sitt spenderande och sätta upp sparandemål.
-
-## Innehållsförteckning
-1. [Skärmdumpar](#skärmdumpar)
-2. [Teknologier](#teknologier)
-3. [Installation](#installation)
-4. [Funktioner](#funktioner)
-5. [Arkitektur / Struktur](#arkitektur--struktur)
-6. [Framtida Utveckling](#framtida-utveckling)
-
-## Skärmdumpar
+![Home screen](./images/addTransaction(2).png)
 
 
-## Teknologier
+
+
+## Table of Contents
+
+1. [Technologies](#technologies)
+2. [Installation](#install-instructions)
+3. [Features](#features)
+4. [Architecture / Structure](#architecture--structure)
+5. [Future Development](#future-development)
+6. [Screenshots](#screenshots)
+
+
+
+## Technologies
 - **Android**: Kotlin
 - **Backend**: Java Spring Boot
-- **Databas**: MySQL
+- **Database**: MySQL
 
-## Installation
-För att använda appen med API och databas, följ dessa steg:
+## Install instructions
+To use the app with the API and database, follow these steps:
 
-1. Gå till valfri mapp.
-2. I adressfältet, skriv `cmd` och tryck på **Enter**.
-3. Klona projektet:
+1. Go to any folder.
+2. In the address bar, type `cmd` and press **Enter**.
+3. Clone the project:
    
 ```bash
 git clone https://github.com/AlexanderJson/Mobilt_Java23_Alexander_Jansson_API_intergration_v4
@@ -33,23 +37,42 @@ git clone https://github.com/AlexanderJson/Mobilt_Java23_Alexander_Jansson_API_i
 git clone https://github.com/AlexanderJson/Mobilt_Java23_Alexander_Jansson_API_intergrationv4-SPRING_API
 ```
 
-## Funktioner
-- **Registrering/Logga in**: Sker med hashing och JWT-token.
-- **Lägg till transaktioner**: Spara transaktioner i databasen.
-- **Visa till transaktioner**: Hämta transaktioner från databasen.
+## Features
+- **Register/Login**: Uses hashing and JWT tokens for security.
+- **Add transactions**: Save transactions to the database.
+- **View transactions**: Retrieve transactions from the database.
+
+## Architecture / Structure
+The app's structure is based on the following pattern:
+
+- **API network** ➔ `api` class (HTTP requests) ➔ `repository` that returns HTTP results ➔ `service` class (additional logic) ➔ `viewmodels` for lifecycle management.
+- Uses **Coroutines** and **LiveData** throughout.
+- Secure data (like authentication tokens) is stored encrypted in `SharedPreferences`.
+- **Data classes** are used to handle HTTP responses.
+
+## Future Development
+- **Delete transaction** (in progress).
+- **Budget goals**: Users will be able to set and adjust budget goals.
+- **Statistics and Notifications**: Display spending statistics in the app, with warning notifications.
+- **Neural Network for predicting ideal deadlines & patterns in spending**: Use data from transactions & budget goals to calculate and find patterns in user activity for enchanced budget help.
 
 
-## Arkitektur / Struktur
-Appens struktur är baserad på följande mönster:
+## Screenshots
 
-- **API-nätverk** ➔ `api`-klass (HTTP requests) ➔ `repository` som returnerar http resultat ➔ `service`-klass (extra logik) ➔ `viewmodels` för livscykelhantering.
-- Använder **Coroutines** och **LiveData** i alla sammanhang.
-- Säker data (som autentiseringstoken) sparas krypterat i `SharedPreferences`.
-- **Data-klasser** används för att hantera HTTP-responser.
+### Home Screen
+![Home Screen](./images/home.png)
 
-## Framtida Utveckling
-- **Ta bort transaktion** (på väg).
-- **Sparmål**: Användaren ska kunna sätta upp och anpassa budgetmål.
-- **Statistik och Notiser**: Statistik över utgifter visas i appen, med varningsnotiser.
+### Login Screen
+![Login Screen](./images/login(1).png)
 
+### Alternate Login View
+![Alternate Login View](./images/login(2).png)
 
+### Registration Screen
+![Registration Screen](./images/register.png)
+
+### Add Transaction
+![Add Transaction](./images/addTransaction.png)
+
+### Alternate Add Transaction View
+![Alternate Add Transaction View](./images/addTransaction(2).png)
