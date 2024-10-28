@@ -1,5 +1,6 @@
 package com.example.bankapp.Model
 
+import com.example.bankapp.Transactions.TransactionApiRequests
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,5 +29,8 @@ object ApiClient {
             .build()
         return retrofit.create(serviceClass)
 
+    }
+    val transactionApi: TransactionApiRequests by lazy {
+        retrofit.create(TransactionApiRequests::class.java)
     }
 }

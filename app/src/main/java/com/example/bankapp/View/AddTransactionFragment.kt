@@ -11,8 +11,8 @@ import androidx.fragment.app.DialogFragment
 import com.example.bankapp.Model.ApiClient
 import com.example.bankapp.Model.Transactions
 import com.example.bankapp.R
-import com.example.bankapp.adapters.SharedPreferencesUtil.getJwtToken
-import com.example.bankapp.adapters.TransactionRepository
+import com.example.bankapp.SharedPreferencesUtil.getJwtToken
+import com.example.bankapp.Transactions.TransactionRepository
 import retrofit2.Call
 import retrofit2.Response
 
@@ -67,11 +67,10 @@ class AddTransactionFragment : DialogFragment() {
 
         if (token != null) {
 
-            val transactionsService = ApiClient.createService(TransactionRepository::class.java)
-
+            val transactionRepository = TransactionRepository(ApiClient.transactionApi)
             val authHeader = "Bearer $token"
 
-            transactionsService.addTransaction(authHeader,transaction)
+            transactionRepository.addTransaction(authHeader,transaction)
                 .enqueue(object : retrofit2.Callback<TransactionsResponse>
                 {
                     override fun onResponse(

@@ -1,4 +1,4 @@
-package com.example.bankapp.adapters
+package com.example.bankapp
 
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
