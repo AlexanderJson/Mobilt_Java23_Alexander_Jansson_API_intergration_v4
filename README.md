@@ -3,6 +3,8 @@
 En Android-app där man säkert kan följa sitt spenderande och sätta upp sparandemål.
 ![Home screen](./images/addTransaction(2).png)
 
+## Download
+[Download the latest APK](https://github.com/username/repository/releases/latest)
 
 
 
@@ -14,7 +16,6 @@ En Android-app där man säkert kan följa sitt spenderande och sätta upp spara
 4. [Architecture / Structure](#architecture--structure)
 5. [Future Development](#future-development)
 6. [Screenshots](#screenshots)
-
 
 
 ## Technologies
