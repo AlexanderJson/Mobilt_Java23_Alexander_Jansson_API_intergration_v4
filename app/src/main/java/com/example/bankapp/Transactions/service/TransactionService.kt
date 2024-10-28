@@ -1,23 +1,14 @@
-package com.example.bankapp.Transactions
+package com.example.bankapp.Transactions.service
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
-import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
-import android.widget.Toast
-import androidx.fragment.app.DialogFragment
-import com.example.bankapp.Model.ApiClient
-import com.example.bankapp.Model.Transaction
-import com.example.bankapp.R
-import com.example.bankapp.SharedPreferencesUtil
-import com.example.bankapp.SharedPreferencesUtil.getJwtToken
-import com.example.bankapp.View.TransactionsResponse
-import retrofit2.Call
-import retrofit2.Response
+import com.example.bankapp.API.ApiRequests
+import com.example.bankapp.Transactions.models.Transaction
+import com.example.bankapp.API.security.SharedPreferencesUtil
+import com.example.bankapp.API.security.SharedPreferencesUtil.getJwtToken
+import com.example.bankapp.Transactions.repository.TransactionRepository
 
-class TransactionService(private val apiClient: TransactionApiRequests, private val context: Context) {
+class TransactionService(private val apiClient: ApiRequests, private val context: Context) {
 
     private val transactionRepository = TransactionRepository(apiClient)
 

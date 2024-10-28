@@ -1,4 +1,4 @@
-package com.example.bankapp.View
+package com.example.bankapp.Transactions.fragment
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -6,17 +6,11 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
-import com.example.bankapp.Model.ApiClient
-import com.example.bankapp.Model.Transaction
+import com.example.bankapp.Transactions.models.Transaction
 import com.example.bankapp.R
-import com.example.bankapp.SharedPreferencesUtil.getJwtToken
-import com.example.bankapp.Transactions.TransactionRepository
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Response
 
 class AddTransactionFragment : DialogFragment() {
 

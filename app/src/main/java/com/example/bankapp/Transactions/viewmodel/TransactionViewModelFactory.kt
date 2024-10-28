@@ -1,9 +1,8 @@
-package com.example.bankapp.View.ui.login
+package com.example.bankapp.Transactions.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.bankapp.Transactions.TransactionService
-import com.example.bankapp.Transactions.TransactionViewModel
+import com.example.bankapp.Transactions.service.TransactionService
 
 
 /* eftersom viewmodelProvider endast tar emot "no argument" viewmodels, så

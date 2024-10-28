@@ -1,4 +1,4 @@
-package com.example.bankapp.Model
+package com.example.bankapp.Transactions.models
 
 data class Transaction(
     val id: Int = 0,

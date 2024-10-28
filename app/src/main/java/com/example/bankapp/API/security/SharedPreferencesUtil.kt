@@ -1,4 +1,4 @@
-package com.example.bankapp
+package com.example.bankapp.API.security
 
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
@@ -25,6 +25,10 @@ object SharedPreferencesUtil {
         }
 
 
+    fun cleanPreferences(context: Context) {
+        val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        sharedPreferences.edit().clear().apply()
+    }
 
 
 }

@@ -32,4 +32,5 @@
     <string name="budget">Budget Goal (optional)</string>
     <string name="Update_profile">Update</string>
     <string name="Delete_user">Delete</string>
+    <string name="user_economy">Your economy</string>
 </resources>

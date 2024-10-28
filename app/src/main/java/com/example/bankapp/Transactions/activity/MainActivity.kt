@@ -1,32 +1,27 @@
-package com.example.bankapp.View
+package com.example.bankapp.Transactions.activity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bankapp.Model.ApiClient
-import com.example.bankapp.Model.Transaction
+import com.example.bankapp.API.ApiClient
+import com.example.bankapp.Transactions.models.Transaction
 import com.example.bankapp.Model.TransactionAdapter
 import com.example.bankapp.R
-import com.example.bankapp.SharedPreferencesUtil
-import com.example.bankapp.Transactions.TransactionRepository
-import com.example.bankapp.Transactions.TransactionService
-import com.example.bankapp.Transactions.TransactionViewModel
-import com.example.bankapp.View.ui.login.TransactionViewModelFactory
+import com.example.bankapp.Users.Authorization.AuthActivity
+import com.example.bankapp.API.security.SharedPreferencesUtil
+import com.example.bankapp.Transactions.fragment.AddTransactionFragment
+import com.example.bankapp.Transactions.service.TransactionService
+import com.example.bankapp.Transactions.viewmodel.TransactionViewModel
+import com.example.bankapp.Transactions.viewmodel.TransactionViewModelFactory
+import com.example.bankapp.Users.activity.ProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity(), AddTransactionFragment.OnTransactionAddedListener {
 
@@ -43,29 +38,22 @@ class MainActivity : AppCompatActivity(), AddTransactionFragment.OnTransactionAd
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-
-
-        // *** Recycler View + LiveData *** ///
-
+        // *** Instansierar  *** ///
         transactionService = TransactionService(ApiClient.transactionApi, this)
-
         val factory = TransactionViewModelFactory(transactionService)
         transactionViewModel = ViewModelProvider(this,factory)[TransactionViewModel::class.java]
-
         addDialog = AddTransactionFragment()
 
 
-        // *** Starts service functions *** ///
-
+        // *** Hämta live data till recycler view *** ///
         transactionViewModel.getTransactions(this)
-
         transactionViewModel.transactions.observe(this) { transactions ->
             transactionList.clear()
             transactions?.let { transactionList.addAll(it) }
             transactionAdapter.notifyDataSetChanged()
         }
 
-
+        // *** Recycler View *** ///
         recyclerView = findViewById(R.id.transactionsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         transactionAdapter = TransactionAdapter(transactionList)
@@ -87,24 +75,40 @@ class MainActivity : AppCompatActivity(), AddTransactionFragment.OnTransactionAd
 
         // *** MENU *** ///
 
+
         val bottomNavigatonView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
         bottomNavigatonView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
+
                 R.id.nav_home -> {
                     true
                 }
-
                 R.id.nav_edit_users -> {
                     val intent = Intent(this, ProfileActivity::class.java)
+                    // återanvänder aktivitet och flyttar upp i stack om den är i bacstack
+                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                     startActivity(intent)
 
                     true
                 }
+
+                R.id.nav_user_economy -> {
+                    val intent = Intent(this, UserEconomyActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+
+                    startActivity(intent)
+
+                    true
+                }
+
                 R.id.nav_logout -> {
                     val intent = Intent(this, AuthActivity::class.java)
+                    // rensar alla stacks och skapar ny för authActivity
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    // rensar shared prefs så ingen tidigsre info är med
+                    SharedPreferencesUtil.cleanPreferences(this)
                     startActivity(intent)
-                  //  userService.logoutUser()
                     finish()
                     true
                 }
