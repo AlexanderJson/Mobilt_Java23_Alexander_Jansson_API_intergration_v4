@@ -1,6 +1,6 @@
 package com.example.bankapp.Model
 
-data class Transactions(
+data class Transaction(
     val id: Int = 0,
     val userId: Int = 0,
     val amount: Double,

@@ -1,6 +1,7 @@
 package com.example.bankapp.Transactions
 
-import com.example.bankapp.Model.Transactions
+import com.example.bankapp.Model.Transaction
+import com.example.bankapp.Model.User
 import com.example.bankapp.View.TransactionsResponse
 import retrofit2.Call
 import retrofit2.http.Body
@@ -14,15 +15,31 @@ interface TransactionApiRequests {
 
 
     @POST("transactions/add")
-    fun addTransaction(
+    suspend fun addTransaction(
        @Header ("Authorization") token: String, //JWT token , user details
-       @Body transaction: Transactions // transaction details to add
-    ): Call<TransactionsResponse>
+       @Body transaction: Transaction // transaction details to add
+    ): TransactionsResponse
 
 
 
     @GET("transactions/user")
-    fun getTransaction(
+   suspend  fun getTransaction(
         @Header("Authorization") token: String,
-    ): Call<List<Transactions>>
+    ): List<Transaction>
+
+
+    @GET("/users/get/")
+    fun getUsers(
+        @Header("Authorization") token: String,
+    ):Call<List<User>>
+
+
+    @POST("/users/register")
+    fun registerUser(@Body user: User): Call<Void>
+
+
+    @POST("/authenticate")
+    fun authenticateUser(@Body user: User): Call<Map<String, String>>
 }
+
+

@@ -10,7 +10,7 @@ import com.example.bankapp.R
 class UserAdapter(private val users: List<User>) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
     class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val userEmail: TextView = itemView.findViewById(R.id.userEmail)
+        val userEmail: TextView = itemView.findViewById(R.id.emailEditText)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {

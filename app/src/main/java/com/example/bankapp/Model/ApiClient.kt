@@ -33,4 +33,5 @@ object ApiClient {
     val transactionApi: TransactionApiRequests by lazy {
         retrofit.create(TransactionApiRequests::class.java)
     }
+
 }

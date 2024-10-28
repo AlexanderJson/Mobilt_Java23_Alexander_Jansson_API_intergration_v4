@@ -1,17 +1,17 @@
 package com.example.bankapp.Transactions
 
-import com.example.bankapp.Model.Transactions
+import com.example.bankapp.Model.Transaction
 import com.example.bankapp.View.TransactionsResponse
 import retrofit2.Call
 
 class TransactionRepository (private val apiRequests: TransactionApiRequests) {
 
 
-        fun getTransaction(token: String): Call<List<Transactions>> {
+        suspend fun getTransaction(token: String): List<Transaction> {
             return apiRequests.getTransaction(token)
         }
 
-        fun addTransaction(token: String, newTransaction: Transactions): Call<TransactionsResponse> {
+        suspend fun addTransaction(token: String, newTransaction: Transaction): TransactionsResponse {
             return apiRequests.addTransaction(token, newTransaction)
         }
     }

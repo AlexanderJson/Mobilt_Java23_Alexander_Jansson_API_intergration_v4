@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bankapp.R
 
-class TransactionAdapter(private val transactionList: List<Transactions>) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+class TransactionAdapter(private val transactionList: List<Transaction>) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     // hämtar och sätter alla itemViews med default värden
     class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

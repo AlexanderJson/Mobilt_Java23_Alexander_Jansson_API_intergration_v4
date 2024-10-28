@@ -8,15 +8,23 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bankapp.Model.ApiClient
+import com.example.bankapp.Model.Transaction
 import com.example.bankapp.Model.TransactionAdapter
-import com.example.bankapp.Model.Transactions
 import com.example.bankapp.R
 import com.example.bankapp.SharedPreferencesUtil
 import com.example.bankapp.Transactions.TransactionRepository
+import com.example.bankapp.Transactions.TransactionService
+import com.example.bankapp.Transactions.TransactionViewModel
+import com.example.bankapp.View.ui.login.TransactionViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
@@ -24,33 +32,60 @@ class MainActivity : AppCompatActivity(), AddTransactionFragment.OnTransactionAd
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var transactionAdapter: TransactionAdapter
+    private lateinit var transactionService: TransactionService
+    private var transactionList = mutableListOf<Transaction>()
+    private lateinit var transactionViewModel: TransactionViewModel
 
-    private var transactionList = mutableListOf<Transactions>()
+    lateinit var addDialog: AddTransactionFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        val addBtn = findViewById<android.widget.Button>(R.id.addExpenseButton)
-        val dialog = AddTransactionFragment()
-        val testBtn = findViewById<android.widget.Button>(R.id.removeExpenseButton)
-        getTransaction()
+
+
+
+        // *** Recycler View + LiveData *** ///
+
+        transactionService = TransactionService(ApiClient.transactionApi, this)
+
+        val factory = TransactionViewModelFactory(transactionService)
+        transactionViewModel = ViewModelProvider(this,factory)[TransactionViewModel::class.java]
+
+        addDialog = AddTransactionFragment()
+
+
+        // *** Starts service functions *** ///
+
+        transactionViewModel.getTransactions(this)
+
+        transactionViewModel.transactions.observe(this) { transactions ->
+            transactionList.clear()
+            transactions?.let { transactionList.addAll(it) }
+            transactionAdapter.notifyDataSetChanged()
+        }
+
 
         recyclerView = findViewById(R.id.transactionsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         transactionAdapter = TransactionAdapter(transactionList)
-
         recyclerView.adapter = transactionAdapter
 
 
+
+        // *** UI ELEMENT *** ///
+        val addBtn = findViewById<android.widget.Button>(R.id.addExpenseButton)
+
         addBtn.setOnClickListener {
-            dialog.show(supportFragmentManager, "AddTransactionDialog")
+            addDialog.show(supportFragmentManager, "AddTransactionFragment")
         }
 
-        testBtn.setOnClickListener {
-            getTransaction()
-        }
+        // ta in textEdit - kör remove metod
+        val removeBtn = findViewById<android.widget.Button>(R.id.removeExpenseButton)
 
+
+
+        // *** MENU *** ///
 
         val bottomNavigatonView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
@@ -70,6 +105,7 @@ class MainActivity : AppCompatActivity(), AddTransactionFragment.OnTransactionAd
                     val intent = Intent(this, AuthActivity::class.java)
                     startActivity(intent)
                   //  userService.logoutUser()
+                    finish()
                     true
                 }
                 else -> {
@@ -77,84 +113,31 @@ class MainActivity : AppCompatActivity(), AddTransactionFragment.OnTransactionAd
                 }
             }
         }
-
-
-
-    }
-
-    private fun loadFragment(chosenFragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, chosenFragment)
-            .commit()
-    }
-
-    private fun getTransaction(){
-        val token = SharedPreferencesUtil.getJwtToken(this)
-        val authHeader = "Bearer $token"
-        val repository = TransactionRepository(ApiClient.transactionApi)
-
-        repository.getTransaction(authHeader).enqueue(object : retrofit2.Callback<List<Transactions>> {
-            override fun onResponse(call: Call<List<Transactions>>, response: Response<List<Transactions>>) {
-                if (response.isSuccessful) {
-                   val transactions = response.body()
-
-                    transactionList.clear()
-                    transactions?.let { transactionList.addAll(it) }
-
-                    transactionAdapter.notifyDataSetChanged()
-                    Toast.makeText(this@MainActivity, "Transactions fetched successfully", Toast.LENGTH_SHORT).show()
-                }
-            }
-            override fun onFailure(call: Call<List<Transactions>>, t: Throwable) {
-                Log.e("MainActivity", "Error: ${t.message}")
-            }
-             })
-
     }
 
 
-    override fun onTransactionAdded(transaction: Transactions){
-        addTransaction(this,transaction)
-        Log.d("MainActivity", "Transaction added: $transaction.amount")
-        transactionList.add(transaction)
-        transactionAdapter.notifyItemInserted(transactionList.size - 1)
-        recyclerView.scrollToPosition(transactionList.size - 1)
-    }
+//    // gör universiell ?
+//    private fun navigateFragment(fragment: Fragment){
+//        val navigation = supportFragmentManager.beginTransaction()
+//        // tar fragment som argument
+//        navigation.replace(R.id.fragment_container, fragment)
+//        // behåller i backstack
+//        navigation.addToBackStack(null)
+//        navigation.commit()
+//    }
 
 
-    private fun addTransaction(context: Context, transaction: Transactions){
-        val token = SharedPreferencesUtil.getJwtToken(context);
 
-        if (token != null){
-            val transactionRepository = TransactionRepository(ApiClient.transactionApi)
-            val authHeader = "Bearer $token"
-            Log.d("MainActivity", "Token in addTransaction: $authHeader")
-
-            transactionRepository.addTransaction(authHeader,transaction)
-                .enqueue(object : retrofit2.Callback<TransactionsResponse> {
-                    override fun onResponse(
-                        call: Call<TransactionsResponse>,
-                        response: Response<TransactionsResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            Log.d("AddTransaction", "Transaction added successfully")
-                            Toast.makeText(
-                                context,
-                                "Transaction added successfully",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                        } else {
-                            Log.e("AddTransaction", "Error adding transaction: ${response.code()}")
-                        }
-                    }
-
-                    override fun onFailure(call: Call<TransactionsResponse>, t: Throwable) {
-                        Log.e("AddTransaction", "Error: ${t.message}")
-                    }
-                })
+    // hämtar värdena returnerade från fragment
+    override  fun onTransactionAdded(transaction: Transaction){
+        lifecycleScope.launch {
+            transactionService.addTransaction(this@MainActivity,transaction)
+            Log.d("MainActivity", "Transaction added: $transaction.amount")
+            transactionList.add(transaction)
+            transactionAdapter.notifyItemInserted(transactionList.size - 1)
+            recyclerView.scrollToPosition(transactionList.size - 1)
+        }
         }
     }
-}
 
 

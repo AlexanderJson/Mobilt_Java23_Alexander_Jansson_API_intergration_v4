@@ -8,18 +8,23 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.example.bankapp.Model.ApiClient
-import com.example.bankapp.Model.Transactions
+import com.example.bankapp.Model.Transaction
 import com.example.bankapp.R
 import com.example.bankapp.SharedPreferencesUtil.getJwtToken
 import com.example.bankapp.Transactions.TransactionRepository
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
 class AddTransactionFragment : DialogFragment() {
 
+
+    // TODO: ABSTRAKTA KLASSER!
+
     interface OnTransactionAddedListener {
-        fun onTransactionAdded(transaction: Transactions)
+         fun onTransactionAdded(transaction: Transaction)
     }
 
     private var listener: OnTransactionAddedListener? = null
@@ -40,10 +45,12 @@ class AddTransactionFragment : DialogFragment() {
             val name = nameEditText.text.toString()
             if (amount != null && name.isNotEmpty()) {
 
-                val transaction = Transactions(amount = amount, name = name)
-                addTransaction(requireContext(), transaction)
+                val transaction = Transaction(amount = amount, name = name)
                 Log.d("AddTransactionFragment", "Transaction created with amount: $amount")
-                listener?.onTransactionAdded(transaction)
+
+                lifecycleScope.launch {
+                    listener?.onTransactionAdded(transaction)
+                }
                 dismiss()
             }
         }
@@ -56,44 +63,6 @@ class AddTransactionFragment : DialogFragment() {
             listener = context as OnTransactionAddedListener
         } catch (e: ClassCastException) {
             throw ClassCastException("$context must implement OnTransactionAddedListener")
-        }
-    }
-
-
-    private fun addTransaction(context: Context, transaction: Transactions) {
-
-        // hämtar jwt token från shared prefs
-        val token = getJwtToken(context)
-
-        if (token != null) {
-
-            val transactionRepository = TransactionRepository(ApiClient.transactionApi)
-            val authHeader = "Bearer $token"
-
-            transactionRepository.addTransaction(authHeader,transaction)
-                .enqueue(object : retrofit2.Callback<TransactionsResponse>
-                {
-                    override fun onResponse(
-                        call: Call<TransactionsResponse>,
-                        response: Response<TransactionsResponse>
-                    ) {
-                        if (response.isSuccessful){
-                            Log.d("AddTransactionFragment", "Transaction added successfully")
-                            Toast.makeText(context, "Transaction added successfully", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Log.e("AddTransactionFragment", "Error adding transaction: ${response.code()}")
-                            Toast.makeText(context, "Error adding transaction: ${response.code()}", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    override fun onFailure(call: Call<TransactionsResponse>, t: Throwable) {
-                        Log.e("AddTransaction", "Error: ${t.message}")
-                    }
-                }
-                )
-
-
-
         }
     }
 }

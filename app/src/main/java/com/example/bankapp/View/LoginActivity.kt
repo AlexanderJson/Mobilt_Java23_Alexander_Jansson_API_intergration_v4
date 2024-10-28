@@ -102,7 +102,11 @@ class LoginActivity : AppCompatActivity() {
                 */sharedPreferences.edit().putString("token", token).apply()
 
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                startActivity(intent)
+                intent.flags =
+                    Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
             }else{
                 Log.d("NULL TOKEN", "JWT Token: $token")
 
